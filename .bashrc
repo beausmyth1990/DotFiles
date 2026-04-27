@@ -2,6 +2,10 @@ PS1="\e[34;66m\u\e[0m$"
 
 alias ls="ls -la"
 alias cat="batcat"
+alias gs="git status"
+alias gc="git commit . -m"
+alias gp="git pull"
+alias gpsh="git push"
 
 printfln_clr(){
 	printf "\e[$1;$2m%s\e[0m\n" "${*:3}";
