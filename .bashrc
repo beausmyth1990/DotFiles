@@ -1,4 +1,4 @@
-PS1="\e[34;66m\u\e[0m$"
+PS1="\e[34;66m\u\e[0m\e[$(echo $? == 0 ? '43;21' : '0;100')m$\e[0m"
 
 alias ls="ls -la"
 alias cat="batcat"
@@ -41,4 +41,5 @@ wbe(){
 }
 
 cd ~
+
 pwd
