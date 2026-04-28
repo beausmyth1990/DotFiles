@@ -1,4 +1,4 @@
-PS1="\e[34;66m\u\e[0m\e[$(echo $? == 0 ? '43;21' : '0;100')m$\e[0m"
+PS1="\e[34;66m\u$\e[0m"
 
 alias ls="ls -la"
 alias cat="batcat"
@@ -11,9 +11,20 @@ printfln_clr(){
 	printf "\e[$1;$2m%s\e[0m\n" "${*:3}";
 }
 
+preview_clrs(){
+	for i in {0..100}; do
+		printfln_clr $i $((100 - $i)) "some color"
+	done;
+}
+
 wbe(){
 	if [[ -z $1 ]]; then
 		echo "workbook not specified" >&2
+		return 1;
+	fi
+
+	if [[ $( find ~/workbook/ -name "*$1*" | wc -l ) -gt 1 ]]; then
+		echo 'more than a single workbook match, please be more specific' >&2
 		return 1;
 	fi
 
@@ -29,15 +40,23 @@ wbe(){
 		mkdir ~/workbook
 	fi
 
-	wb="workbook/$1"
+	existing="$(basename $(find ~/workbook -name *$1* | head -n 1))"
+echo $existing
+	wb=''
 
-	touch ~/"$wb"
-
-	if [[ $(grep $date < ~/"$wb" | wc -l) -eq 0 ]]; then
-		 printf "$date\n\n" >> ~/"$wb"
+	if [[ $existing == '' ]]; then
+		echo $existing
+		wb=workbook/"$1"
+		touch ~/$wb
+	else
+		wb=workbook/"$existing"
 	fi
 
-	printf "$time: %s\n" "${*:2}" >> ~/"$wb"
+	if [[ $(grep $date < ~/$wb | wc -l) -eq 0 ]]; then
+		 printf "$date\n\n" >> ~/$wb
+	fi
+
+	printf "$time: %s\n" "${*:2}" >> ~/$wb
 }
 
 cd ~

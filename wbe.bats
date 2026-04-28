@@ -20,9 +20,8 @@ setup(){
 }
 
 @test "wbe | workbook file does not exist | workbook file created with date and time-stamped entry" {
-		local workbook="$(uuidgen)_test_workbook"
+		local workbook="$(uuidgen)"
 		
-		# assert that file does not exist
 		! [[ -e ~/workbook/"$workbook" ]]
 
  		run wbe $workbook "some entry..."
@@ -35,15 +34,31 @@ setup(){
 }
 
 @test "wbe | date exists in file | consecutive entries do not cause duplicate date stamps, with each entry time-stamped" {
-		local workbook="$(uuidgen)_test_workbook"
+		local workbook="$(uuidgen)"
 
  		run wbe $workbook "some entry...1"
  		run wbe $workbook "some entry...2"
  		run wbe $workbook "some entry...3"
 
+		# 3 entries above means a single date stamp followed by
+		# 3 time-stamped entries
 		[[ -e ~/workbook/"$workbook" ]]
 		[[ $( grep -e "^$(date '+%Y-%m-%d')$" < ~/workbook/"$workbook" | wc -l ) -eq 1 ]]
 		[[ $( grep "$(date '+%H:%M'):" < ~/workbook/"$workbook" | wc -l ) -eq 3 ]]
+
+		rm ~/workbook/"$workbook"
+}
+
+@test "wbe | partial filename specified with only a single match | entry is inserted into file that matches" {
+		local workbook="$(uuidgen)_test"
+		# ensure that this workbook is pre-existing
+		touch ~/workbook/"$workbook"
+	
+		run wbe '_test' "some entry..."
+
+		! [[ -e ~/workbook/"_test" ]]
+		[[ $( grep -e "^$(date '+%Y-%m-%d')$" < ~/workbook/"$workbook" | wc -l ) -eq 1 ]]
+		[[ $( grep "$(date '+%H:%M'):" < ~/workbook/"$workbook" | wc -l ) -eq 1 ]]
 
 		rm ~/workbook/"$workbook"
 }
