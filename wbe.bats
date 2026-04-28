@@ -50,13 +50,13 @@ setup(){
 }
 
 @test "wbe | partial filename specified with only a single match | entry is inserted into file that matches" {
-		local workbook="$(uuidgen)_test"
+		local workbook="test_$(uuidgen)"
 		# ensure that this workbook is pre-existing
 		touch ~/workbook/"$workbook"
 	
-		run wbe '_test' "some entry..."
+		run wbe 'test' "some entry..."
 
-		! [[ -e ~/workbook/"_test" ]]
+		! [[ -e ~/workbook/"test" ]]
 		[[ $( grep -e "^$(date '+%Y-%m-%d')$" < ~/workbook/"$workbook" | wc -l ) -eq 1 ]]
 		[[ $( grep "$(date '+%H:%M'):" < ~/workbook/"$workbook" | wc -l ) -eq 1 ]]
 

@@ -23,7 +23,7 @@ wbe(){
 		return 1;
 	fi
 
-	if [[ $( find ~/workbook/ -name "*$1*" | wc -l ) -gt 1 ]]; then
+	if [[ $( find ~/workbook/ -name $1* | wc -l ) -gt 1 ]]; then
 		echo 'more than a single workbook match, please be more specific' >&2
 		return 1;
 	fi
@@ -40,7 +40,7 @@ wbe(){
 		mkdir ~/workbook
 	fi
 
-	existing="$(basename $(find ~/workbook -name *$1* | head -n 1))"
+	existing="$(basename $(find ~/workbook -name $1* | head -n 1))"
 echo $existing
 	wb=''
 
