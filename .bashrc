@@ -15,7 +15,7 @@ printfln_clr() {
 
 preview_clrs() {
   for i in {0..100}; do
-    printfln_clr $i $((100 - $i)) "some color"
+    printfln_clr $i $((100 - $i)) "$i;$((100 - $i))"
   done
 }
 
