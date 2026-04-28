@@ -40,8 +40,7 @@ wbe(){
 		mkdir ~/workbook
 	fi
 
-	existing="$(basename $(find ~/workbook -name $1* | head -n 1))"
-echo $existing
+	existing="$(basename $(find ~/workbook/ -name $1* | head -n 1))"
 	wb=''
 
 	if [[ $existing == '' ]]; then
