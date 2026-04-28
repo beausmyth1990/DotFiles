@@ -52,7 +52,7 @@ wbe(){
 	fi
 
 	if [[ $(grep $date < ~/$wb | wc -l) -eq 0 ]]; then
-		 printf "$date\n\n" >> ~/$wb
+		 printf "\n$date\n\n" >> ~/$wb
 	fi
 
 	printf "$time: %s\n" "${*:2}" >> ~/$wb
