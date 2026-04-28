@@ -6,58 +6,62 @@ alias gs="git status"
 alias gc="git commit . -m"
 alias gp="git pull"
 alias gpsh="git push"
+alias vi="nvim"
+alias vim="nvim"
 
-printfln_clr(){
-	printf "\e[$1;$2m%s\e[0m\n" "${*:3}";
+printfln_clr() {
+  printf "\e[$1;$2m%s\e[0m\n" "${*:3}"
 }
 
-preview_clrs(){
-	for i in {0..100}; do
-		printfln_clr $i $((100 - $i)) "some color"
-	done;
+preview_clrs() {
+  for i in {0..100}; do
+    printfln_clr $i $((100 - $i)) "some color"
+  done
 }
 
-wbe(){
-	if [[ -z $1 ]]; then
-		echo "workbook not specified" >&2
-		return 1;
-	fi
+wbe() {
+  if [[ -z $1 ]]; then
+    echo "workbook not specified" >&2
+    return 1
+  fi
 
-	if [[ $( find ~/workbook/ -name $1* | wc -l ) -gt 1 ]]; then
-		echo 'more than a single workbook match, please be more specific' >&2
-		return 1;
-	fi
+  if [[ $(find ~/workbook/ -name $1* | wc -l) -gt 1 ]]; then
+    echo 'more than a single workbook match, please be more specific' >&2
+    return 1
+  fi
 
-	if [[ -z $2 ]]; then
-		echo "entry not specified" >&2
-		return 1;
-	fi
+  if [[ -z $2 ]]; then
+    echo "entry not specified" >&2
+    return 1
+  fi
 
-	local date=$(date '+%Y-%m-%d');
-	local time=$(date '+%H:%M');
+  local date=$(date '+%Y-%m-%d')
+  local time=$(date '+%H:%M')
 
-        if ! [[ -d ~/workbook ]]; then
-		mkdir ~/workbook
-	fi
+  if ! [[ -d ~/workbook ]]; then
+    mkdir ~/workbook
+  fi
 
-	existing="$(basename $(find ~/workbook/ -name $1* | head -n 1))"
-	wb=''
+  existing="$(basename $(find ~/workbook/ -name $1* | head -n 1) 2>/dev/null)"
+  wb=''
 
-	if [[ $existing == '' ]]; then
-		echo $existing
-		wb=workbook/"$1"
-		touch ~/$wb
-	else
-		wb=workbook/"$existing"
-	fi
+  if [[ $existing == '' ]]; then
+    echo $existing
+    wb=workbook/"$1"
+    touch ~/$wb
+  else
+    wb=workbook/"$existing"
+  fi
 
-	if [[ $(grep $date < ~/$wb | wc -l) -eq 0 ]]; then
-		 printf "\n$date\n\n" >> ~/$wb
-	fi
+  if [[ $(grep $date <~/$wb | wc -l) -eq 0 ]]; then
+    printf "\n$date\n\n" >>~/$wb
+  fi
 
-	printf "$time: %s\n" "${*:2}" >> ~/$wb
+  printf "$time: %s\n" "${*:2}" >>~/$wb
 }
 
 cd ~
+
+PATH="$(echo $PATH | tr ':' "\n" | grep -e '^/[^mnt]' | tr "\n" ':')"
 
 pwd
