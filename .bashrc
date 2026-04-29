@@ -1,4 +1,13 @@
-PS1="\e[34;66m\u$\e[0m"
+PROMPT_COMMAND=__prompt_command
+
+__prompt_command() {
+  EXIT="$?"
+  PS1="\e[66;34m\u\e[0m"
+
+  if [ $EXIT != 0 ]; then
+    PS1="$PS1\e[95;5m$EXIT\e[0m"
+  fi
+}
 
 alias ls="ls -la"
 alias cat="batcat"
