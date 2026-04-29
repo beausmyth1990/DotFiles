@@ -25,7 +25,9 @@ wbe() {
     return 1
   fi
 
-  if [[ $(find ~/workbook/ -name $1* | wc -l) -gt 1 ]]; then
+  # If there are multiple files starting with the same name and an exact name is NOT found,
+  # then we should advise the user that the specified file is ambiguous.
+  if [[ $(find ~/workbook/ -name $1* | wc -l) -gt 1 ]] && [[ $(find ~/workbook/ -name $1) -eq 0 ]]; then
     echo 'more than a single workbook match, please be more specific' >&2
     return 1
   fi
@@ -42,15 +44,20 @@ wbe() {
     mkdir ~/workbook
   fi
 
-  existing="$(basename $(find ~/workbook/ -name $1* | head -n 1) 2>/dev/null)"
-  wb=''
-
+  local existing="$(basename $(find ~/workbook/ -name $1) 2>/dev/null)"
+  # if we didn't find an exact match then we look for a partial match
   if [[ $existing == '' ]]; then
-    echo $existing
-    wb=workbook/"$1"
+    existing="$(basename $(find ~/workbook/ -name $1* | head -n 1) 2>/dev/null)"
+  fi
+
+  wb='workbook'
+  # if no partial or exact existing file was found then
+  # we need to create one as this means it's a new workbook
+  if [[ $existing == '' ]]; then
+    wb="$wb/$1"
     touch ~/$wb
   else
-    wb=workbook/"$existing"
+    wb="$wb/$existing"
   fi
 
   if [[ $(grep $date <~/$wb | wc -l) -eq 0 ]]; then
@@ -62,6 +69,7 @@ wbe() {
 
 cd ~
 
+# Filter out any references to the mnt directory, so it doesn't pollute the PATH
 PATH="$(echo $PATH | tr ':' "\n" | grep -e '^/[^mnt]' | tr "\n" ':')"
 
 pwd
