@@ -28,7 +28,7 @@ spinner() {
   until ! [[ $(ps | grep "$PID") ]]; do
     printf "\b${SPINNER_FRAMES[$FRAME_INDEX]}"
     sleep .25
-    FRAME_INDEX="$(($FRAME + 1))"
+    FRAME_INDEX="$(($FRAME_INDEX + 1))"
     if [[ $FRAME_INDEX == ${#SPINNER_FRAMES[@]} ]]; then
       FRAME_INDEX=0
     fi
