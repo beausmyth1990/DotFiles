@@ -1,6 +1,6 @@
-PROMPT_COMMAND=__prompt_command
+PROMPT_COMMAND=__append_unsuccessful_exit_status
 
-__prompt_command() {
+__append_unsuccessful_exit_status() {
   EXIT="$?"
   PS1="\e[66;34m\u\e[0m"
 
@@ -17,6 +17,24 @@ alias gp="git pull"
 alias gpsh="git push"
 alias vi="nvim"
 alias vim="nvim"
+
+spinner() {
+  PID=$(
+    "$1" >/dev/null "${*:2}" &
+    echo $!
+  )
+  SPINNER_FRAMES=("|" "/" "-" "\\")
+  FRAME_INDEX=0
+  until ! [[ $(ps | grep "$PID") ]]; do
+    printf "\b${SPINNER_FRAMES[$FRAME_INDEX]}"
+    sleep .25
+    FRAME_INDEX="$(($FRAME + 1))"
+    if [[ $FRAME_INDEX == ${#SPINNER_FRAMES[@]} ]]; then
+      FRAME_INDEX=0
+    fi
+  done
+  printf "\b"
+}
 
 printfln_clr() {
   printf "\e[$1;$2m%s\e[0m\n" "${*:3}"
