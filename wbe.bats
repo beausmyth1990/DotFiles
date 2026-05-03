@@ -7,7 +7,7 @@ setup() {
 @test "wbe | no workbook specified |  exit code 1 and error message" {
   run wbe
   [ "$status" -eq 1 ]
-  [ "$output" = "workbook not specified" ]
+  [ "$output" = 'please provide a workbook name' ]
 }
 
 @test "wbe | no entry specified | exit code 1 and error message" {
@@ -16,7 +16,7 @@ setup() {
   run wbe $workbook
 
   [ "$status" -eq 1 ]
-  [ "$output" = "entry not specified" ]
+  [ "$output" = 'please provide a workbook entry' ]
 }
 
 @test "wbe | workbook file does not exist | workbook file created with date and time-stamped entry" {
