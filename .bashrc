@@ -23,6 +23,7 @@ alias tr1="tree -L 1"
 alias tr2="tree -L 2"
 alias tr3="tree -L 3"
 alias tr4="tree -L 4"
+alias cb="xclip -sel clipboard"
 
 spinner() {
   PID=$(
@@ -79,7 +80,7 @@ wbe() {
 
   local existing="$(basename $(find $WORKBOOK_DIR -name $1) 2>/dev/null)"
   # if we didn't find an exact match then we look for a partial match
-  if [[ $existing -eq '' ]]; then
+  if [[ $existing == '' ]]; then
     existing="$(basename $(find $WORKBOOK_DIR -name $1* | head -n 1) 2>/dev/null)"
   fi
 
@@ -106,3 +107,6 @@ cd ~
 PATH="$(echo $PATH | tr ':' "\n" | grep -e '^/[^mnt]' | tr "\n" ':')"
 
 pwd
+
+# Added by get-aspire-cli.sh
+export PATH="$HOME/.aspire/bin:$PATH"
