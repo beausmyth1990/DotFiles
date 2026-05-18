@@ -115,6 +115,3 @@ cd ~
 PATH="$(echo $PATH | tr ':' "\n" | grep -e '^/[^mnt]' | tr "\n" ':')"
 
 pwd
-
-# Added by get-aspire-cli.sh
-export PATH="$HOME/.aspire/bin:$PATH"
