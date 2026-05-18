@@ -25,6 +25,14 @@ alias tr3="tree -L 3"
 alias tr4="tree -L 4"
 alias cb="xclip -sel clipboard"
 
+far() {
+  local FIND="$1"
+  local REPACE="$2"
+  local DIR="$3"
+
+  rg $FIND $DIR | awk -F : '{ print $1 }' | xargs sed -i "s/$FIND/$REPACE/g"
+}
+
 spinner() {
   PID=$(
     "$1" >/dev/null "${*:2}" &
