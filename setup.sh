@@ -75,17 +75,9 @@ else
   fi
 fi
 
-# --- Treesitter Parser Warm-up ---
-# Precompile treesitter parsers to avoid first-launch race condition
-if which nvim > /dev/null 2>&1; then
-  echo ""
-  echo "Precompiling treesitter parsers..."
-  # Install all parsers that LazyVim declares in ensure_installed
-  # This runs synchronously and waits for compilation to complete
-  # Redirect stderr to suppress LSP/omnisharp errors from headless config loading
-  nvim --headless -c 'TSInstall! bash c diff html javascript jsdoc json lua luadoc markdown markdown_inline python query regex toml tsx typescript vim vimdoc xml yaml c_sharp' -c 'sleep 30' -c 'qa' 2>/dev/null | grep -E '(nvim-treesitter.*Installed|Language installed)' || true
-  echo "Parser warm-up complete."
-fi
-
 echo ""
 echo "Setup complete. Restart your shell or run: source ~/.bashrc"
+echo ""
+echo "NOTE: On the first Neovim launch, give plugins and treesitter parsers a few"
+echo "seconds to finish installing before opening files. A transient 'No parser for"
+echo "language ...' warning on first open is normal and resolves once compilation finishes."
