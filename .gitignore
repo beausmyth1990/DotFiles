@@ -3,7 +3,9 @@
 
 # Except these
 !.gitignore
+!.bashrc
 !README.md
 !nvim
 !nvim/**
 !setup.sh
+!*.bats
