@@ -54,4 +54,9 @@ config.colors = {
   visual_bell = '#ff00ff',  -- Bright magenta flash (synthwave aesthetic)
 }
 
+-- Bell event handler to show exclamation mark
+wezterm.on('bell', function(window, pane)
+  window:toast_notification('wezterm', '❗', nil, 500)
+end)
+
 return config
