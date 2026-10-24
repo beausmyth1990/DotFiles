@@ -1,19 +1,22 @@
--- Cyberpunk / synthwave colorscheme contenders.
--- Try each live with `:colorscheme <name>`, then set the winner
--- in the LazyVim opts block at the bottom.
+-- Tron-style neon blue colorschemes
 return {
-  -- synthwave84: retro 80s sunset (hot pink / orange / purple)
+  -- tokyonight: electric blue/cyan neon (Tron aesthetic)
   {
-    "LunarVim/synthwave84.nvim",
+    "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
-    config = function()
-      -- Enable transparent background to show terminal sunset
-      vim.g.synthwave_termcolors = 256
-    end,
+    opts = {
+      style = "storm", -- storm has the electric blue look
+      transparent = true,
+      terminal_colors = true,
+      styles = {
+        sidebars = "transparent",
+        floats = "transparent",
+      },
+    },
   },
 
-  -- cyberdream: high-contrast neon cyberpunk with bold syntax
+  -- cyberdream: high-contrast neon cyberpunk (backup option)
   {
     "scottmckendry/cyberdream.nvim",
     lazy = false,
@@ -26,14 +29,21 @@ return {
     },
   },
 
-  -- tokyonight: ships with LazyVim, neon-accented deep blues
-  { "folke/tokyonight.nvim" },
+  -- synthwave84: retro 80s sunset (hot pink / orange / purple)
+  {
+    "LunarVim/synthwave84.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.g.synthwave_termcolors = 256
+    end,
+  },
 
   -- Set the active colorscheme here (change the string to switch)
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "synthwave84",
+      colorscheme = "tokyonight-storm",
     },
   },
 }
