@@ -61,11 +61,23 @@ alias cb="xclip -sel clipboard"
 alias clr="clear"
 
 far() {
+  while getopts "f" opts; do
+    case "$opts" in
+    "f")
+      RENAME_FILES=true
+      ;;
+    esac
+  done
+
   local FIND="$1"
   local REPACE="$2"
   local DIR="$3"
 
   rg $FIND $DIR | awk -F : '{ print $1 }' | xargs sed -i "s/$FIND/$REPACE/g"
+
+  if [ -z "$RENAME_FILES" ]; then
+    echo 'time to rename files with the same name match'
+  fi
 }
 
 spinner() {

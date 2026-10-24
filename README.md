@@ -1,8 +1,42 @@
-# Background
-I find it a little inconsistent and annoying to have to re-{script/configure} my dot files with each new development environment.
+# DotFiles
 
-# Purpose
-An easy to access repository of my common dot files which I would want to use (where possible) in my development environment.
+A repository of my shell configuration for easy reuse across development environments.
 
-# Description
-This is a WIP (work-in-progress). Will be adding to this over the years. Feel free to take this code if you wish.
+## .bashrc
+
+### Prompt
+
+Two-line prompt built via `PROMPT_COMMAND`:
+
+- Line 1: colored segments — username (blue), current directory (grey), git branch (green, only inside a repo), exit code (red, only on failure)
+- Line 2: `❯` — white normally, red on error
+
+### Aliases
+
+| Alias       | Command                |
+| ----------- | ---------------------- |
+| `ls`        | `ls -la`               |
+| `cat`       | `batcat`               |
+| `vi`, `vim` | `nvim`                 |
+| `gs`        | `git status`           |
+| `gc`        | `git commit . -m`      |
+| `gp`        | `git pull`             |
+| `gpsh`      | `git push`             |
+| `gd`        | `git diff`             |
+| `tr1`–`tr4` | `tree -L 1..4`         |
+| `cb`        | `xclip -sel clipboard` |
+| `clr`       | `clear`                |
+
+### Functions
+
+- `far <find> <replace> <dir>` — find and replace across files using `rg` and `sed`
+- `spinner <cmd>` — runs a command in the background with a terminal spinner
+- `printfln_clr <style> <color> <text>` — prints colored text via ANSI codes
+- `preview_clrs` — previews ANSI color combinations 0–100
+- `wbe <name> <entry>` — appends a timestamped entry to a named workbook file in `~/workbook/`
+
+### Other
+
+- Filters `/mnt` paths from `$PATH` to prevent Windows PATH pollution
+- Colored man pages via `LESS_TERMCAP_*` (salmon pink scheme)
+- Cursor set to blinking block on shell start
