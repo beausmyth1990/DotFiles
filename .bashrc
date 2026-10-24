@@ -1,1 +1,0 @@
-/home/beau-zo/repos/DotFiles/.bashrc
