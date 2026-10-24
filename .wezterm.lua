@@ -46,17 +46,20 @@ config.cursor_blink_rate = 500
 config.audible_bell = 'SystemBeep'  -- Use system sound
 config.visual_bell = {
   fade_in_function = 'EaseIn',
-  fade_in_duration_ms = 150,
+  fade_in_duration_ms = 80,
   fade_out_function = 'EaseOut',
-  fade_out_duration_ms = 150,
+  fade_out_duration_ms = 80,
 }
 config.colors = {
-  visual_bell = '#ff00ff',  -- Bright magenta flash (synthwave aesthetic)
+  visual_bell = '#8844cc',  -- Softer purple (less intense)
 }
 
--- Bell event handler to show exclamation mark
+-- Bell event handler to show exclamation mark and trigger double flash
 wezterm.on('bell', function(window, pane)
   window:toast_notification('wezterm', '❗', nil, 500)
+  -- Trigger a second flash after a brief delay
+  wezterm.sleep_ms(200)
+  window:perform_action(wezterm.action.SendString('\x07'), pane)
 end)
 
 return config
