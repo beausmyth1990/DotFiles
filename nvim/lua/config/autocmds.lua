@@ -11,7 +11,13 @@
 -- cursor's current line only. Credit: technique from Dave Eddy's vimrc (ysap)
 local redundant_ws = vim.api.nvim_create_augroup("RedundantWhitespace", { clear = true })
 
-vim.api.nvim_set_hl(0, "RedundantWhitespace", { bg = "#c8a165" }) -- light brown
+-- Use foreground + underline for better visibility with transparent backgrounds
+vim.api.nvim_set_hl(0, "RedundantWhitespace", { 
+  fg = "#ff6b6b",  -- Bright red-orange
+  bg = "#3d2020",  -- Dark red background
+  underline = true,
+  sp = "#ff6b6b"   -- Underline color
+})
 
 local match_id = nil
 
