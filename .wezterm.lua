@@ -54,9 +54,23 @@ config.colors = {
   visual_bell = '#8844cc',  -- Softer purple (less intense)
 }
 
--- Bell event handler to show exclamation mark
+-- Bell event handler to show exclamation mark with double-flash
+local bell_in_progress = false
 wezterm.on('bell', function(window, pane)
+  if bell_in_progress then
+    return  -- Prevent recursive triggering
+  end
+  
+  bell_in_progress = true
   window:toast_notification('wezterm', '❗', nil, 4000)  -- Auto-dismiss after 4 seconds
+  
+  -- Schedule second flash
+  wezterm.time.call_after(0.2, function()
+    window:perform_action(wezterm.action.SendString('\x07'), pane)
+    wezterm.time.call_after(0.2, function()
+      bell_in_progress = false
+    end)
+  end)
 end)
 
 return config
