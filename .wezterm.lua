@@ -10,8 +10,8 @@ end
 -- Tron aesthetic - TokyoNight Storm colors (electric blue/cyan)
 config.color_scheme = 'Tokyo Night Storm'
 
--- Clean dark background without image
-config.window_background_opacity = 0.95
+-- Solid dark background - no image
+config.window_background_opacity = 1.0
 
 -- Font
 config.font = wezterm.font('JetBrains Mono', { weight = 'Regular' })
