@@ -42,4 +42,16 @@ config.use_fancy_tab_bar = false
 config.default_cursor_style = 'BlinkingBlock'
 config.cursor_blink_rate = 500
 
+-- Bell configuration
+config.audible_bell = 'SystemBeep'  -- Use system sound
+config.visual_bell = {
+  fade_in_function = 'EaseIn',
+  fade_in_duration_ms = 150,
+  fade_out_function = 'EaseOut',
+  fade_out_duration_ms = 150,
+}
+config.colors = {
+  visual_bell = '#ff00ff',  -- Bright magenta flash (synthwave aesthetic)
+}
+
 return config

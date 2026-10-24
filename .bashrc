@@ -61,6 +61,11 @@ alias tr4="tree -L 4"
 alias cb="xclip -sel clipboard"
 alias clr="clear"
 
+# Bell / alert helper
+alert() {
+  echo -e "\a"
+}
+
 far() {
   while getopts "f" opts; do
     case "$opts" in
