@@ -1,4 +1,4 @@
--- WezTerm configuration with Tron aesthetic
+-- WezTerm configuration with retro synthwave aesthetic
 local wezterm = require 'wezterm'
 local config = {}
 
@@ -7,10 +7,14 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
--- Tron aesthetic - TokyoNight Storm colors (electric blue/cyan)
-config.color_scheme = 'Tokyo Night Storm'
+-- Retro synthwave aesthetic
+config.color_scheme = 'Synth Midnight Terminal Dark (base16)'
 
--- Solid dark background - no image
+-- Dark purple/blue background like synthwave84
+config.colors = {
+  background = '#262335',  -- Deep purple-black background
+}
+
 config.window_background_opacity = 1.0
 
 -- Font
