@@ -3,8 +3,19 @@
 
 Write-Host "Checking for WSL distributions..." -ForegroundColor Cyan
 
-# Get list of all WSL distributions
-$distros = wsl --list --quiet | Where-Object { $_.Trim() -ne "" }
+# Get list of all WSL distributions with proper UTF-16 encoding handling
+$wslOutput = wsl --list --quiet
+$distros = @()
+
+if ($wslOutput) {
+    # Convert from UTF-16 and split into lines
+    $lines = $wslOutput -split "`r?`n" | ForEach-Object { 
+        # Remove null characters and trim whitespace
+        ($_ -replace "`0", "").Trim() 
+    } | Where-Object { $_ -ne "" }
+    
+    $distros = $lines
+}
 
 if ($distros.Count -eq 0) {
     Write-Host "No WSL distributions found." -ForegroundColor Green
@@ -31,14 +42,23 @@ foreach ($distro in $distros) {
     wsl --unregister $distro
     
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "  ✓ Successfully unregistered $distro" -ForegroundColor Green
+        Write-Host "  Successfully unregistered $distro" -ForegroundColor Green
     } else {
-        Write-Host "  ✗ Failed to unregister $distro" -ForegroundColor Red
+        Write-Host "  Failed to unregister $distro" -ForegroundColor Red
     }
 }
 
 Write-Host "`nVerifying cleanup..." -ForegroundColor Cyan
-$remaining = wsl --list --quiet | Where-Object { $_.Trim() -ne "" }
+$wslOutput = wsl --list --quiet
+$remaining = @()
+
+if ($wslOutput) {
+    $lines = $wslOutput -split "`r?`n" | ForEach-Object { 
+        ($_ -replace "`0", "").Trim() 
+    } | Where-Object { $_ -ne "" }
+    
+    $remaining = $lines
+}
 
 if ($remaining.Count -eq 0) {
     Write-Host "All WSL distributions have been removed." -ForegroundColor Green
