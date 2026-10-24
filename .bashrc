@@ -61,8 +61,10 @@ alias tr4="tree -L 4"
 alias cb="xclip -sel clipboard"
 alias clr="clear"
 
-# Bell / alert helper
+# Bell / alert helper (double-flash)
 alert() {
+  echo -e "\a"
+  sleep 0.2
   echo -e "\a"
 }
 
