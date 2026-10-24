@@ -10,3 +10,6 @@
 !setup.sh
 !*.bats
 !*.ps1
+!backgrounds/
+!backgrounds/*
+!.wezterm.lua

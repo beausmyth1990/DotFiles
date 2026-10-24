@@ -10,12 +10,16 @@ end
 -- Retro synthwave aesthetic
 config.color_scheme = 'Synth Midnight Terminal Dark (base16)'
 
--- Dark purple/blue background like synthwave84
-config.colors = {
-  background = '#262335',  -- Deep purple-black background
+-- Synthwave sunset background image
+config.window_background_image = wezterm.home_dir .. '/repos/DotFiles/backgrounds/synthwave-sunset.jpg'
+
+config.window_background_image_hsb = {
+  brightness = 0.03,  -- Very dim so text is readable
+  hue = 1.0,
+  saturation = 1.0,
 }
 
-config.window_background_opacity = 1.0
+config.window_background_opacity = 0.9
 
 -- Font
 config.font = wezterm.font('JetBrains Mono', { weight = 'Regular' })
