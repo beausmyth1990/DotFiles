@@ -3,15 +3,16 @@ PROMPT_COMMAND=__build_prompt
 __build_prompt() {
   local exit=$?
 
-  # Colors
-  local reset="\e[0m"
-  local s1_bg="\e[44m"
-  local s1_fg="\e[97m"
-  local s2_bg="\e[100m"
-  local s2_fg="\e[97m"
-  local s3_bg="\e[42m"
-  local s3_fg="\e[30m"
-  local err_clr="\e[95m"
+  # Colors (wrapped in \[ \] so bash ignores their width)
+  local reset="\[\e[0m\]"
+  local s1_bg="\[\e[44m\]"
+  local s1_fg="\[\e[97m\]"
+  local s2_bg="\[\e[100m\]"
+  local s2_fg="\[\e[97m\]"
+  local s3_bg="\[\e[42m\]"
+  local s3_fg="\[\e[30m\]"
+  local err_bg="\[\e[41m\]"
+  local err_fg="\[\e[97m\]"
 
   # Segment 1: username
   local s1=" $s1_bg$s1_fg \u $reset"
@@ -30,12 +31,12 @@ __build_prompt() {
   # Segment 4: exit code (only on failure, red bg + ✗ prefix)
   local s4=""
   if [[ $exit != 0 ]]; then
-    s4=" \e[41m\e[97m ✗ $exit $reset"
+    s4=" $err_bg$err_fg ✗ $exit $reset"
   fi
 
   # Line 1: segments | Line 2: prompt char (red on error, white on success)
   local prompt_clr
-  [[ $exit != 0 ]] && prompt_clr="\e[91m" || prompt_clr="\e[97m"
+  [[ $exit != 0 ]] && prompt_clr="\[\e[91m\]" || prompt_clr="\[\e[97m\]"
 
   PS1="$s1$s2$s3$s4\n${prompt_clr}❯${reset} "
 }
