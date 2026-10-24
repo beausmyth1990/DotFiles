@@ -3,5 +3,4 @@
 
 # Except these
 !.gitignore
-!.bashrc
 !README.md
