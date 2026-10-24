@@ -82,7 +82,8 @@ if which nvim > /dev/null 2>&1; then
   echo "Precompiling treesitter parsers..."
   # Install all parsers that LazyVim declares in ensure_installed
   # This runs synchronously and waits for compilation to complete
-  nvim --headless -c 'TSInstall! bash c diff html javascript jsdoc json lua luadoc markdown markdown_inline python query regex toml tsx typescript vim vimdoc xml yaml c_sharp' -c 'sleep 30' -c 'qa' 2>&1 | grep -E '(Installing|Installed|Language installed)' || true
+  # Redirect stderr to suppress LSP/omnisharp errors from headless config loading
+  nvim --headless -c 'TSInstall! bash c diff html javascript jsdoc json lua luadoc markdown markdown_inline python query regex toml tsx typescript vim vimdoc xml yaml c_sharp' -c 'sleep 30' -c 'qa' 2>/dev/null | grep -E '(nvim-treesitter.*Installed|Language installed)' || true
   echo "Parser warm-up complete."
 fi
 
