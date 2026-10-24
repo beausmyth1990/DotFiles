@@ -77,3 +77,7 @@ fi
 
 echo ""
 echo "Setup complete. Restart your shell or run: source ~/.bashrc"
+echo ""
+echo "NOTE: On the first Neovim launch, give plugins and treesitter parsers a few"
+echo "seconds to finish installing before opening files. A transient 'No parser for"
+echo "language ...' warning on first open is normal and resolves once compilation finishes."
