@@ -1,12 +1,43 @@
-PROMPT_COMMAND=__append_unsuccessful_exit_status
+PROMPT_COMMAND=__build_prompt
 
-__append_unsuccessful_exit_status() {
-  EXIT="$?"
-  PS1="\e[66;34m\u\e[0m"
+__build_prompt() {
+  local exit=$?
 
-  if [ $EXIT != 0 ]; then
-    PS1="$PS1\e[95;5m$EXIT\e[0m"
+  # Colors
+  local reset="\e[0m"
+  local s1_bg="\e[44m"
+  local s1_fg="\e[97m"
+  local s2_bg="\e[100m"
+  local s2_fg="\e[97m"
+  local s3_bg="\e[42m"
+  local s3_fg="\e[30m"
+  local err_clr="\e[95m"
+
+  # Segment 1: username
+  local s1=" $s1_bg$s1_fg \u $reset"
+
+  # Segment 2: current directory
+  local s2=" $s2_bg$s2_fg \w $reset"
+
+  # Segment 3: git branch (only inside a git repo)
+  local s3=""
+  local branch
+  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  if [[ -n $branch ]]; then
+    s3=" $s3_bg$s3_fg ± $branch $reset"
   fi
+
+  # Segment 4: exit code (only on failure, red bg + ✗ prefix)
+  local s4=""
+  if [[ $exit != 0 ]]; then
+    s4=" \e[41m\e[97m ✗ $exit $reset"
+  fi
+
+  # Line 1: segments | Line 2: prompt char (red on error, white on success)
+  local prompt_clr
+  [[ $exit != 0 ]] && prompt_clr="\e[91m" || prompt_clr="\e[97m"
+
+  PS1="$s1$s2$s3$s4\n${prompt_clr}❯${reset} "
 }
 
 export WORKBOOK_DIR=~/workbook/
@@ -16,6 +47,7 @@ alias cat="batcat"
 alias gs="git status"
 alias gc="git commit . -m"
 alias gp="git pull"
+alias gd="git diff"
 alias gpsh="git push"
 alias vi="nvim"
 alias vim="nvim"
@@ -24,6 +56,7 @@ alias tr2="tree -L 2"
 alias tr3="tree -L 3"
 alias tr4="tree -L 4"
 alias cb="xclip -sel clipboard"
+alias clr="clear"
 
 far() {
   local FIND="$1"
@@ -115,3 +148,16 @@ cd ~
 PATH="$(echo $PATH | tr ':' "\n" | grep -e '^/[^mnt]' | tr "\n" ':')"
 
 pwd
+
+# Set cursor to blinking block
+printf '\e[1 q'
+
+# Colored man pages
+export LESS_TERMCAP_mb=$'\e[1;31m'                 # begin blink (red)
+export LESS_TERMCAP_md=$'\e[38;5;217m'             # begin bold (salmon pink) - headings
+export LESS_TERMCAP_me=$'\e[0m'                    # end bold/blink
+export LESS_TERMCAP_us=$'\e[38;5;181m'             # begin underline (soft salmon) - values
+export LESS_TERMCAP_ue=$'\e[0m'                    # end underline
+export LESS_TERMCAP_so=$'\e[48;5;217m\e[38;5;232m' # begin standout (salmon bg, near-black text)
+export LESS_TERMCAP_se=$'\e[0m'                    # end standout
+export GROFF_NO_SGR=1                              # required for some distros
