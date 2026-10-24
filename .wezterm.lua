@@ -54,12 +54,9 @@ config.colors = {
   visual_bell = '#8844cc',  -- Softer purple (less intense)
 }
 
--- Bell event handler to show exclamation mark and trigger double flash
+-- Bell event handler to show exclamation mark
 wezterm.on('bell', function(window, pane)
   window:toast_notification('wezterm', '❗', nil, 4000)  -- Auto-dismiss after 4 seconds
-  -- Trigger a second flash after a brief delay
-  wezterm.sleep_ms(200)
-  window:perform_action(wezterm.action.SendString('\x07'), pane)
 end)
 
 return config
