@@ -7,30 +7,67 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
--- Highlight redundant whitespace (trailing, or spaces before a tab) on the
--- cursor's current line only. Credit: technique from Dave Eddy's vimrc (ysap)
-local redundant_ws = vim.api.nvim_create_augroup("RedundantWhitespace", { clear = true })
+-- Highlight redundant whitespace (trailing spaces) on cursor line in insert mode
 
--- Use foreground + underline for better visibility with transparent backgrounds
-vim.api.nvim_set_hl(0, "RedundantWhitespace", { 
-  fg = "#ff6b6b",  -- Bright red-orange
-  bg = "#3d2020",  -- Dark red background
-  underline = true,
-  sp = "#ff6b6b"   -- Underline color
+-- Define the highlight group
+local function set_whitespace_hl()
+  vim.api.nvim_set_hl(0, "RedundantWhitespace", { 
+    fg = "#ff6b6b",  -- Bright red-orange
+    bg = "#3d2020",  -- Dark red background
+  })
+end
+
+-- Set it initially
+set_whitespace_hl()
+
+-- Re-apply after colorscheme changes and on every insert enter
+vim.api.nvim_create_autocmd({ "ColorScheme", "InsertEnter" }, {
+  callback = set_whitespace_hl,
 })
 
-local match_id = nil
+-- Track match IDs per window
+local match_ids = {}
 
-vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "WinEnter" }, {
-  group = redundant_ws,
+-- Highlight redundant whitespace on current line (insert mode only)
+vim.api.nvim_create_autocmd({ "InsertEnter" }, {
   callback = function()
-    -- clear previous match
-    if match_id then
-      pcall(vim.fn.matchdelete, match_id)
-      match_id = nil
+    local win_id = vim.api.nvim_get_current_win()
+    
+    -- Clear all previous matches for this window (starting fresh insert session)
+    if match_ids[win_id] then
+      for _, id in ipairs(match_ids[win_id]) do
+        pcall(vim.fn.matchdelete, id)
+      end
     end
-    -- match trailing whitespace / spaces-before-tab, scoped to current line
+    match_ids[win_id] = {}
+    
+    -- Add match for starting line (trailing whitespace AND spaces before tabs)
     local line = vim.fn.line(".")
-    match_id = vim.fn.matchadd("RedundantWhitespace", [[\%]] .. line .. [[l\(\s\+$\| \+\ze\t\)]])
+    local pattern = [[\%]] .. line .. [[l\(\s\+$\| \+\ze\t\)]]
+    table.insert(match_ids[win_id], vim.fn.matchadd("RedundantWhitespace", pattern))
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "CursorMovedI" }, {
+  callback = function()
+    local win_id = vim.api.nvim_get_current_win()
+    local line = vim.fn.line(".")
+    
+    -- Add match for new line (trailing whitespace AND spaces before tabs)
+    local pattern = [[\%]] .. line .. [[l\(\s\+$\| \+\ze\t\)]]
+    table.insert(match_ids[win_id], vim.fn.matchadd("RedundantWhitespace", pattern))
+  end,
+})
+
+-- Clean up when leaving insert mode
+vim.api.nvim_create_autocmd("InsertLeave", {
+  callback = function()
+    local win_id = vim.api.nvim_get_current_win()
+    if match_ids[win_id] then
+      for _, id in ipairs(match_ids[win_id]) do
+        pcall(vim.fn.matchdelete, id)
+      end
+      match_ids[win_id] = nil
+    end
   end,
 })
