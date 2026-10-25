@@ -51,5 +51,18 @@ Write-Host "Scripts copied into repo."
 Write-Host "Running setup.sh..."
 wsl bash -c "cd $dotfilesPath && bash setup.sh"
 
+# Deploy WezTerm config to the Windows home dir.
+# WezTerm runs on Windows and reads %USERPROFILE%\.wezterm.lua, so the repo
+# template must be rendered here with the real distro name and WSL username.
+Write-Host "Deploying WezTerm config..."
+$wslUser = (wsl bash -c "whoami").Trim()
+$weztermTemplate = (wsl bash -c "cat $dotfilesPath/.wezterm.lua")
+$weztermConfig = $weztermTemplate `
+  -replace "__WSL_DISTRO__", $distro `
+  -replace "__WSL_USER__", $wslUser
+$weztermDest = Join-Path $env:USERPROFILE ".wezterm.lua"
+Set-Content -Path $weztermDest -Value $weztermConfig -Encoding UTF8
+Write-Host "WezTerm config written to $weztermDest (distro=$distro, user=$wslUser)."
+
 Write-Host ""
 Write-Host "All done! Open a new WSL terminal to get started."

@@ -11,7 +11,7 @@ end
 config.color_scheme = 'Synth Midnight Terminal Dark (base16)'
 
 -- Synthwave sunset background image (Windows path to WSL file)
-config.window_background_image = '\\\\wsl.localhost\\Ubuntu-26.04\\home\\beaus\\repos\\DotFiles\\backgrounds\\synthwave-sunset.jpg'
+config.window_background_image = '\\\\wsl.localhost\\__WSL_DISTRO__\\home\\__WSL_USER__\\repos\\DotFiles\\backgrounds\\synthwave-sunset.jpg'
 
 config.window_background_image_hsb = {
   brightness = 0.03,  -- Very dim so text is readable
