@@ -63,9 +63,47 @@ alias clr="clear"
 
 # Bell / alert helper (double-flash)
 alert() {
+  # Save cursor position
+  tput sc
+  
+  # Get terminal dimensions
+  local cols=$(tput cols)
+  local lines=$(tput lines)
+  
+  # Skull is 11 chars wide, 7 lines tall
+  local mid_col=$(((cols - 11) / 2))
+  local mid_line=$(((lines - 7) / 2))
+  
+  # Big ASCII crossbones - centered
+  tput cup $mid_line $mid_col
+  echo -e "\033[1;35m   _____   \033[0m"
+  tput cup $((mid_line + 1)) $mid_col
+  echo -e "\033[1;35m  /     \\  \033[0m"
+  tput cup $((mid_line + 2)) $mid_col
+  echo -e "\033[1;35m | () () | \033[0m"
+  tput cup $((mid_line + 3)) $mid_col
+  echo -e "\033[1;35m  \\  ^  /  \033[0m"
+  tput cup $((mid_line + 4)) $mid_col
+  echo -e "\033[1;35m   |||||   \033[0m"
+  tput cup $((mid_line + 5)) $mid_col
+  echo -e "\033[1;35m  X     X  \033[0m"
+  tput cup $((mid_line + 6)) $mid_col
+  echo -e "\033[1;35m XXX   XXX \033[0m"
+  
+  # Trigger double flash
   echo -e "\a"
   sleep 0.2
   echo -e "\a"
+  sleep 0.3
+  
+  # Clear all skull lines
+  for i in {0..6}; do
+    tput cup $((mid_line + i)) $mid_col
+    echo -n "           "
+  done
+  
+  # Restore cursor position
+  tput rc
 }
 
 far() {

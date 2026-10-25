@@ -12,8 +12,9 @@
 -- Define the highlight group
 local function set_whitespace_hl()
   vim.api.nvim_set_hl(0, "RedundantWhitespace", { 
-    fg = "#ff6b6b",  -- Bright red-orange
-    bg = "#3d2020",  -- Dark red background
+    fg = "#000000",  -- Black text
+    bg = "#66ff66",  -- Lighter neon green background
+    bold = true,
   })
 end
 
@@ -41,9 +42,9 @@ vim.api.nvim_create_autocmd({ "InsertEnter" }, {
     end
     match_ids[win_id] = {}
     
-    -- Add match for starting line (trailing whitespace AND spaces before tabs)
+    -- Add match for starting line (ALL whitespace)
     local line = vim.fn.line(".")
-    local pattern = [[\%]] .. line .. [[l\(\s\+$\| \+\ze\t\)]]
+    local pattern = [[\%]] .. line .. [[l\s]]
     table.insert(match_ids[win_id], vim.fn.matchadd("RedundantWhitespace", pattern))
   end,
 })
@@ -53,8 +54,8 @@ vim.api.nvim_create_autocmd({ "CursorMovedI" }, {
     local win_id = vim.api.nvim_get_current_win()
     local line = vim.fn.line(".")
     
-    -- Add match for new line (trailing whitespace AND spaces before tabs)
-    local pattern = [[\%]] .. line .. [[l\(\s\+$\| \+\ze\t\)]]
+    -- Add match for new line (ALL whitespace)
+    local pattern = [[\%]] .. line .. [[l\s]]
     table.insert(match_ids[win_id], vim.fn.matchadd("RedundantWhitespace", pattern))
   end,
 })
